@@ -1,0 +1,189 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+#continer {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+@media (max-width: 600px) {
+  #continer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.form_con {
+  width: fit-content;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 15px; /* פינות עגולות יותר */
+  overflow: hidden;
+  padding-bottom: 10px;
+  text-align: center;
+  font-family: "Calibri", sans-serif;
+  font-size: 19px;
+  background-color: rgba(255, 255, 255, 0.9);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 20px;
+}
+
+table td {
+  padding: 5px;
+}
+
+.form_con .button {
+  margin-top: 5px;
+  border-radius: 5px;
+  background-color: #ff7b00;
+  color: aliceblue;
+  width: 100%;
+  padding: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  text-align: center;
+  font-family: Helvetica;
+  font-size: 50px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: white;
+}
+
+h2 {
+  font-family: Helvetica;
+  font-size: 20px;
+  padding-bottom: 10px;
+  font-weight: bold;
+}
+
+body {
+  background: #1b2838;
+}

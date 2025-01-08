@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://proj.ruppin.ac.il/igroup10/test2/tar2/CSS/CSS_login.css"
+    />
+    <title>Login and Register</title>
+
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      $(document).ready(function () {
+        $("#login").submit(function () {
+          user = {
+            email: $("#log_email").val(),
+            password: $("#log_password").val(),
+          };
+          api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Login";
+          ajaxCall("POST", api, JSON.stringify(user), lscb, lecb);
+          return false;
+        });
+
+        function lscb(result) {
+          console.log("Login success:", result);
+          if (typeof result === "string") {
+            alert(result); // For string response
+          } else {
+            alert(result.message || "Logged in successfully"); // For JSON response
+          }
+        }
+
+        function lecb(err) {
+          console.log(err);
+          if (err.responseJSON) {
+            alert(err.responseJSON.message);
+          } else {
+            alert(err.responseText);
+          }
+        }
+
+        $("#Register").submit(function () {
+          //alert("in register submit");
+          user = {
+            name: $("#reg_name").val(),
+            email: $("#reg_email").val(),
+            password: $("#reg_password").val(),
+          };
+          api =
+            "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Register";
+          ajaxCall("POST", api, JSON.stringify(user), rscb, recb);
+          return false;
+        });
+
+        function rscb(result) {
+          console.log("Register success:", result);
+          if (typeof result === "string") {
+            alert(result); // For string response
+          } else {
+            alert(result.message || "Registered successfully"); // For JSON response
+          }
+        }
+
+        function recb(err) {
+          console.log(err);
+          if (err.responseJSON) {
+            alert(err.responseJSON.message);
+          } else {
+            alert(err.responseText);
+          }
+        }
+      });
+    </script>
+    <script
+      src="https://proj.ruppin.ac.il/igroup10/test2/tar2/script/ajaxCall.js"
+      defer
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+  </head>
+
+  <body>
+    <a href="index.html" style="color: white">Games</a>
+    <h1>Welcome!</h1>
+    <div id="continer">
+      <div>
+        <form id="login" class="form_con">
+          <h2>Login:</h2>
+          <table>
+            <tr>
+              <td>Email:</td>
+              <td>
+                <input
+                  type="text"
+                  id="log_email"
+                  pattern="^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Password:</td>
+              <td>
+                <input
+                  type="text"
+                  id="log_password"
+                  pattern="^[A-Z0-9]+$"
+                  required
+                />
+              </td>
+            </tr>
+          </table>
+          <input type="submit" value="Login" class="button" id="customAlert" />
+        </form>
+      </div>
+
+      <div>
+        <form id="Register" class="form_con">
+          <h2>Register:</h2>
+          <table>
+            <tr>
+              <td>Name:</td>
+              <td><input type="text" id="reg_name" /></td>
+            </tr>
+            <tr>
+              <td>Email:</td>
+              <td>
+                <input
+                  type="text"
+                  id="reg_email"
+                  pattern="^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Password:</td>
+              <td>
+                <input
+                  type="text"
+                  id="reg_password"
+                  pattern="^[A-Z0-9]+$"
+                  required
+                />
+              </td>
+            </tr>
+          </table>
+          <input
+            type="submit"
+            value="Register"
+            class="button"
+            id="registerAlert"
+          />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

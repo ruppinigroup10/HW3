@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!--<link
+      rel="stylesheet"
+      href="https://proj.ruppin.ac.il/igroup10/test2/tar2/CSS/CSS_login.css"
+    />-->
+    <link rel="stylesheet" href="/CSS/CSS_login.css" />
+    <!--Font Awesome for icons-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <title>Login and Register</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        //////////////////////////////////
+        // Password toggle functionality//
+        //////////////////////////////////
+        $(".password-toggle").click(function () {
+          const passwordField = $(this).siblings("input");
+          if (passwordField.attr("type") === "password") {
+            passwordField.attr("type", "text");
+            $(this).removeClass("fa-eye").addClass("fa-eye-slash");
+          } else {
+            passwordField.attr("type", "password");
+            $(this).removeClass("fa-eye-slash").addClass("fa-eye");
+          }
+        });
+        ////////////////////////////////
+        // Tab switching functionality//
+        ////////////////////////////////
+        $(".tab-button").click(function () {
+          $(".tab-button").removeClass("active");
+          $(this).addClass("active");
+          const formId = $(this).data("form");
+          $(".form_con").hide();
+          $(`#${formId}`).fadeIn();
+        });
+
+        //////////////////////////
+        // Show login by default//
+        //////////////////////////
+        $('.tab-button[data-form="login"]').click();
+
+        ////////////////////////
+        // Login functionality//
+        ////////////////////////
+        $("#login").submit(function () {
+          user = {
+            email: $("#log_email").val(),
+            password: $("#log_password").val(),
+          };
+          //api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Login";
+          api = "https://localhost:7214/api/Users/Login";
+
+          console.log("Attempting login with:", user);
+
+          ajaxCall("POST", api, JSON.stringify(user), lscb, lecb);
+          return false;
+        });
+
+        // function lscb(result) {
+        //   console.log("Login success:", result);
+
+        //   if (typeof result === "string") {
+        //     Swal.fire({
+        //       title: "Success!",
+        //       text: result, // For string response
+        //       icon: "success",
+        //       timer: 1500,
+        //       showConfirmButton: false,
+        //     }).then(() => {
+        //       window.location.replace("index.html");
+        //     });
+        //   } else {
+        //     Swal.fire({
+        //       title: "Success!",
+        //       text: result.message || "Logged in successfully", // For JSON response
+        //       icon: "success",
+        //       timer: 1500,
+        //       showConfirmButton: false,
+        //     }).then(() => {
+        //       window.location.replace("index.html");
+        //     });
+        //   }
+        // }
+
+        // function lecb(err) {
+        //   console.log(err);
+        //   if (err.responseJSON) {
+        //     Swal.fire({
+        //       title: "Error!",
+        //       text: err.responseJSON.message,
+        //       icon: "error",
+        //       confirmButtonText: "OK",
+        //     });
+        //   } else {
+        //     Swal.fire({
+        //       title: "Error!",
+        //       text: err.responseText,
+        //       icon: "error",
+        //       confirmButtonText: "OK",
+        //     });
+        //   }
+        // }
+
+        function lscb(result) {
+          console.log("Login success:", result);
+
+          const userEmail = $("#log_email").val();
+          //const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users";
+          const api = "https://localhost:7214/api/Users";
+
+          ajaxCall(
+            "GET",
+            api,
+            "",
+            function (usersData) {
+              console.log("Users data received:", usersData);
+
+              const currentUser = usersData.find(
+                (user) => user.email === userEmail
+              );
+
+              if (currentUser) {
+                // Store sensitive info separately
+                localStorage.setItem(
+                  "userCredentials",
+                  JSON.stringify({
+                    email: currentUser.email,
+                    password: $("#log_password").val(),
+                  })
+                );
+
+                // Store display info without password
+                localStorage.setItem(
+                  "user",
+                  JSON.stringify({
+                    id: currentUser.id,
+                    name: currentUser.name,
+                    email: currentUser.email,
+                    isLoggedIn: true,
+                  })
+                );
+              } else {
+                localStorage.setItem(
+                  "user",
+                  JSON.stringify({
+                    email: userEmail,
+                    isLoggedIn: true,
+                  })
+                );
+              }
+
+              Swal.fire({
+                title: "Success!",
+                text:
+                  typeof result === "string"
+                    ? result
+                    : result.message || "Logged in successfully",
+                icon: "success",
+                timer: 1500,
+                showConfirmButton: false,
+              }).then(() => {
+                window.location.replace("index.html");
+              });
+            },
+            function (err) {
+              console.log("GET request error details:", err);
+              localStorage.setItem(
+                "user",
+                JSON.stringify({
+                  email: userEmail,
+                  isLoggedIn: true,
+                })
+              );
+
+              Swal.fire({
+                title: "Success!",
+                text:
+                  typeof result === "string"
+                    ? result
+                    : result.message || "Logged in successfully",
+                icon: "success",
+                timer: 1500,
+                showConfirmButton: false,
+              }).then(() => {
+                window.location.replace("index.html");
+              });
+            }
+          );
+        }
+
+        function lecb(err) {
+          console.log(err);
+          if (err.responseJSON) {
+            Swal.fire({
+              title: "Error!",
+              text: err.responseJSON.message,
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: err.responseText,
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+          }
+        }
+
+        ////////////////////////
+        // Register functionality//
+        ////////////////////////
+        $("#Register").submit(function () {
+          //alert("in register submit");
+          user = {
+            name: $("#reg_name").val(),
+            email: $("#reg_email").val(),
+            password: $("#reg_password").val(),
+          };
+          //api ="https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Register";
+          api = "https://localhost:7214/api/Users/Register";
+
+          ajaxCall("POST", api, JSON.stringify(user), rscb, recb);
+          return false;
+        });
+
+        function rscb(result) {
+          console.log("Register success:", result);
+
+          const userEmail = $("#reg_email").val();
+          //const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users";
+          const api = "https://localhost:7214/api/Users";
+
+          ajaxCall(
+            "GET",
+            api,
+            "",
+            function (usersData) {
+              console.log("Users data received:", usersData);
+
+              const currentUser = usersData.find(
+                (user) => user.email === userEmail
+              );
+
+              if (currentUser) {
+                // Store sensitive info separately
+                localStorage.setItem(
+                  "userCredentials",
+                  JSON.stringify({
+                    email: currentUser.email,
+                    password: $("#reg_password").val(),
+                  })
+                );
+
+                // Store display info without password
+                localStorage.setItem(
+                  "user",
+                  JSON.stringify({
+                    id: currentUser.id,
+                    name: currentUser.name,
+                    email: currentUser.email,
+                    isLoggedIn: true,
+                  })
+                );
+              } else {
+                localStorage.setItem(
+                  "user",
+                  JSON.stringify({
+                    email: userEmail,
+                    isLoggedIn: true,
+                  })
+                );
+              }
+
+              Swal.fire({
+                title: "Success!",
+                text:
+                  typeof result === "string"
+                    ? result
+                    : result.message || "Registered successfully",
+                icon: "success",
+                timer: 1500,
+                showConfirmButton: false,
+              }).then(() => {
+                window.location.replace("index.html");
+              });
+            },
+            function (err) {
+              console.log("GET request error details:", err);
+              localStorage.setItem(
+                "user",
+                JSON.stringify({
+                  email: userEmail,
+                  isLoggedIn: true,
+                })
+              );
+
+              Swal.fire({
+                title: "Success!",
+                text:
+                  typeof result === "string"
+                    ? result
+                    : result.message || "Registered successfully",
+                icon: "success",
+                timer: 1500,
+                showConfirmButton: false,
+              }).then(() => {
+                window.location.replace("index.html");
+              });
+            }
+          );
+        }
+
+        function recb(err) {
+          console.log(err);
+          if (err.responseJSON) {
+            Swal.fire({
+              title: "Error!",
+              text: err.responseJSON.message,
+              icon: "error",
+              confirmButtonText: "Try Again",
+              confirmButtonColor: "#d33",
+              showClass: {
+                popup: "animate__animated animate__fadeIn",
+              },
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: err.responseText,
+              icon: "error",
+              confirmButtonText: "Try Again",
+              confirmButtonColor: "#d33",
+              showClass: {
+                popup: "animate__animated animate__fadeIn",
+              },
+            });
+          }
+        }
+      });
+    </script>
+    <!--<script
+      src="https://proj.ruppin.ac.il/igroup10/test2/tar2/script/ajaxCall.js"
+      defer
+    ></script>-->
+    <script src="/script/ajaxCall.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+  </head>
+
+  <body>
+    <a href="index.html" class="home-link" style="color: white">
+      <i class="fas fa-gamepad"></i> Games
+    </a>
+    <h1>Welcome!</h1>
+
+    <div id="continer">
+      <div class="auth-container">
+        <!------------------>
+        <!--Tab navigation-->
+        <!------------------>
+        <div class="tab-navigation">
+          <button class="tab-button" data-form="login">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+          <button class="tab-button" data-form="Register">
+            <i class="fas fa-user-plus"></i> Register
+          </button>
+        </div>
+
+        <form id="login" class="form_con">
+          <h2>Login</h2>
+          <table>
+            <tr>
+              <td><i class="fas fa-envelope"></i> Email:</td>
+              <td>
+                <input
+                  type="text"
+                  id="log_email"
+                  placeholder="Enter your email"
+                  pattern="^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-lock"></i> Password:</td>
+              <td>
+                <div class="password-field">
+                  <input
+                    type="password"
+                    id="log_password"
+                    placeholder="Enter your password"
+                    pattern="^[A-Z0-9]+$"
+                    required
+                  />
+                  <i class="fas fa-eye password-toggle"></i>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <input type="submit" value="Login" class="button" id="customAlert" />
+        </form>
+
+        <form id="Register" class="form_con">
+          <h2>Register</h2>
+          <table>
+            <tr>
+              <td><i class="fas fa-user"></i> Name:</td>
+              <td>
+                <input
+                  type="text"
+                  id="reg_name"
+                  placeholder="Enter your name"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-envelope"></i> Email:</td>
+              <td>
+                <input
+                  type="text"
+                  id="reg_email"
+                  placeholder="Enter your email"
+                  pattern="^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-lock"></i> Password:</td>
+              <td>
+                <div class="password-field">
+                  <input
+                    type="password"
+                    id="reg_password"
+                    placeholder="Enter your password"
+                    pattern="^[A-Z0-9]+$"
+                    required
+                  />
+                  <i class="fas fa-eye password-toggle"></i>
+                </div>
+                <div style="color: #666; font-size: 12px; margin-top: 2px">
+                  * Uppercase letters & numbers only
+                </div>
+              </td>
+            </tr>
+          </table>
+          <input
+            type="submit"
+            value="Register"
+            class="button"
+            id="registerAlert"
+          />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
