@@ -37,14 +37,19 @@
 
         if (user && user.isLoggedIn) {
           $("#userInfo").html(`
-            <div>
-                <p>Welcome, ${user.name || user.email}!</p>
-                <a href="MyGames.html" style="color: white; margin-right: 10px;">My Games</a>
-                <button onclick="logout()" class="btn btn-danger">Logout</button>
-            </div>
+          <div>
+              <p>Welcome, ${user.name || user.email}!</p>
+              <a href="MyGames.html" style="color: white; margin-right: 10px;">My Games</a>
+              <button onclick="logout()" class="btn btn-danger">Logout</button>
+          </div>
         `);
         } else {
-          window.location.replace("login.html");
+          // Show login link for non-logged-in users
+          $("#userInfo").html(`
+          <div>
+              <a href="login.html" style="color: white;">Login</a>
+          </div>
+        `);
         }
       });
 
