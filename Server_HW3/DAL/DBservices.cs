@@ -137,61 +137,61 @@ public class DBservices
         }
     }
 
-    public List<Game> getAllMyGames(User user)
-    {
+    // public List<Game> getAllMyGames(User user)
+    // {
 
-        SqlConnection con;
-        SqlCommand cmd;
+    //     SqlConnection con;
+    //     SqlCommand cmd;
 
-        try
-        {
-            con = connect("myProjDB"); // create the connection
-        }
-        catch (Exception)
-        {
-            // write to log
-            throw;
-        }
+    //     try
+    //     {
+    //         con = connect("myProjDB"); // create the connection
+    //     }
+    //     catch (Exception)
+    //     {
+    //         // write to log
+    //         throw;
+    //     }
 
-        List<Game> gameList = new List<Game>();
+    //     List<Game> gameList = new List<Game>();
 
-        Dictionary<string, object> paramDic = new Dictionary<string, object>();
-        paramDic.Add("@ID", user.id);
+    //     Dictionary<string, object> paramDic = new Dictionary<string, object>();
+    //     paramDic.Add("@ID", user.id);
 
-        cmd = CreateCommandWithStoredProcedureGeneral("SP_ShowAllMyGames", con, paramDic);
+    //     cmd = CreateCommandWithStoredProcedureGeneral("SP_ShowAllMyGames", con, paramDic);
 
-        try
-        {
+    //     try
+    //     {
 
-            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+    //         SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-            while (dataReader.Read())
-            {
-                Game g = new Game();
-                g.AppID = Convert.ToInt32(dataReader["AppID"]);
-                g.Name = dataReader["Name"].ToString() ?? "";
-                g.ReleaseDate = Convert.ToDateTime(dataReader["Release_date"]);
-                g.Price = Convert.ToDouble(dataReader["Price"]);
-                g.Publisher = dataReader["Developers"].ToString() ?? "";
-                g.HeaderImage = dataReader["Header_image"].ToString() ?? "";
-                gameList.Add(g);
-            }
-            return gameList;
-        }
-        catch (Exception)
-        {
-            // write to log
-            throw;
-        }
-        finally
-        {
-            if (con != null)
-            {
-                // close the db connection
-                con.Close();
-            }
-        }
-    }
+    //         while (dataReader.Read())
+    //         {
+    //             Game g = new Game();
+    //             g.AppID = Convert.ToInt32(dataReader["AppID"]);
+    //             g.Name = dataReader["Name"].ToString() ?? "";
+    //             g.ReleaseDate = Convert.ToDateTime(dataReader["Release_date"]);
+    //             g.Price = Convert.ToDouble(dataReader["Price"]);
+    //             g.Publisher = dataReader["Developers"].ToString() ?? "";
+    //             g.HeaderImage = dataReader["Header_image"].ToString() ?? "";
+    //             gameList.Add(g);
+    //         }
+    //         return gameList;
+    //     }
+    //     catch (Exception)
+    //     {
+    //         // write to log
+    //         throw;
+    //     }
+    //     finally
+    //     {
+    //         if (con != null)
+    //         {
+    //             // close the db connection
+    //             con.Close();
+    //         }
+    //     }
+    // }
 
     //---------------------------------------------------------------------------------
     // Create the SqlCommand

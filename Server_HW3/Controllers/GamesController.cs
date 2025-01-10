@@ -10,13 +10,6 @@ namespace Server.Controllers
     public class GamesController : ControllerBase
     {
         // GET: api/<GamesController>
-        //[HttpGet]
-        //public IEnumerable<Game> Get()
-        //{
-        //    Console.WriteLine("in con");
-        //    return Game.readGame();
-        //}
-
         [HttpGet]
         public ActionResult<IEnumerable<Game>> Get()
         {
@@ -46,54 +39,25 @@ namespace Server.Controllers
             return Game.GetByRankScore(minRankScore);
         }
 
-        // GET api/<GamesController>/5
-        //[HttpGet("getMyGames")]
-        //public ActionResult<IEnumerable<Game>> Get(User user)
-        //{
-        //    if (user == null)
-        //    {
-        //        return BadRequest("User data is null");
-        //    }
 
-        //    try //check for errors
-        //    {
-        //        Console.WriteLine("API GetAllMyGames request received");
-        //        var games = Game.readMyGame(user);
-        //        Console.WriteLine($"Retrieved {games.Count} my games");
-        //        return Ok(games);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error in GetAllMyGames: {ex.Message}");
-        //        return StatusCode(500, ex.Message);
-        //    }
-
-        //}
-
-        [HttpGet("GetGamesByUserId/userID/{ID}")]
-        public ActionResult<IEnumerable<Game>> GetGamesByUserId(int ID)
-        {
-            try
-            {
-                Console.WriteLine($"API GetGamesByUserId request received for user {ID}");
-                User user = new User { id = ID };
-                var games = Game.readMyGame(user);
-                Console.WriteLine($"Retrieved {games.Count} games for user {ID}");
-                return Ok(games);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in GetGamesByUserId: {ex.Message}");
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        // POST api/<GameController> original
-        // [HttpPost]
-        // public bool Post([FromBody] Game game)
+        // [HttpGet("GetGamesByUserId/userID/{ID}")]
+        // public ActionResult<IEnumerable<Game>> GetGamesByUserId(int ID)
         // {
-        //     return game.insertGame();
+        //     try
+        //     {
+        //         Console.WriteLine($"API GetGamesByUserId request received for user {ID}");
+        //         User user = new User { id = ID };
+        //         var games = Game.readMyGame(user);
+        //         Console.WriteLine($"Retrieved {games.Count} games for user {ID}");
+        //         return Ok(games);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine($"Error in GetGamesByUserId: {ex.Message}");
+        //         return StatusCode(500, ex.Message);
+        //     }
         // }
+
 
         // POST api/<GameController>
         [HttpPost]
@@ -139,7 +103,7 @@ namespace Server.Controllers
             }
             catch (Exception)
             {
-                return BadRequest(new { message = $"Invalid ID: {id}" }); 
+                return BadRequest(new { message = $"Invalid ID: {id}" });
             }
         }
     }

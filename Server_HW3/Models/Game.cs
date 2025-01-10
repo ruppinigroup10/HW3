@@ -108,18 +108,18 @@ namespace Server.Models
             return dbs.getAllGames();
 
             //return gameList;
-            
-        }
-
-        public static List<Game> readMyGame(User user)
-        {
-            DBservices dbs = new DBservices();
-            Console.WriteLine("in BL before return");
-            return dbs.getAllMyGames(user);
-
-            //return gameList;
 
         }
+
+        // public static List<Game> readMyGame(User user)
+        // {
+        //     DBservices dbs = new DBservices();
+        //     Console.WriteLine("in BL before return");
+        //     return dbs.getAllMyGames(user);
+
+        //     //return gameList;
+
+        // }
 
         public static List<Game> GetByPrice(double minPrice)
         {
