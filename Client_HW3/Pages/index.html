@@ -39,7 +39,7 @@
           $("#userInfo").html(`
           <div>
               <p>Welcome, ${user.name || user.email}!</p>
-              <a href="MyGames.html" style="color: white; margin-right: 10px;">My Games</a>
+              <a href="/Pages/MyGames.html" style="color: white; margin-right: 10px;">My Games</a>
               <button onclick="logout()" class="btn btn-danger">Logout</button>
           </div>
         `);
@@ -47,7 +47,7 @@
           // Show login link for non-logged-in users
           $("#userInfo").html(`
           <div>
-              <a href="login.html" style="color: white;">Login</a>
+              <a href="/Pages/login.html" style="color: white;">Login</a>
           </div>
         `);
         }
@@ -64,7 +64,7 @@
           timer: 1500,
           showConfirmButton: false,
         }).then(() => {
-          window.location.replace("login.html");
+          window.location.replace("/Pages/login.html");
         });
       }
     </script>
@@ -74,8 +74,8 @@
       <div id="userInfo" style="color: white; text-align: right; padding: 10px">
         <!-- User info will be displayed here -->
       </div>
-      <!-- <a href="login.html" style="color: white">Login</a>
-      <a href="MyGames.html" style="color: white">MyGAMES</a> -->
+      <!-- <a href="/Pages/login.html" style="color: white">Login</a>
+      <a href="/Pages/MyGames.html" style="color: white">MyGAMES</a> -->
       <h1>Games</h1>
       <div id="main"></div>
       <!--main-->

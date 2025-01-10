@@ -13,7 +13,7 @@ using Server_HW3.Models;
 /// </summary>
 public class DBservices
 {
-    
+
 
     public DBservices()
     {
@@ -50,10 +50,10 @@ public class DBservices
         {
             con = connect("myProjDB"); // create the connection
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // write to log
-            throw (ex);
+            throw;
         }
 
         Dictionary<string, object> paramDic = new Dictionary<string, object>();
@@ -67,10 +67,10 @@ public class DBservices
             int numEffected = cmd.ExecuteNonQuery(); // execute the command
             return numEffected;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // write to log
-            throw (ex);
+            throw;
         }
 
         finally
@@ -94,10 +94,10 @@ public class DBservices
         {
             con = connect("myProjDB"); // create the connection
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // write to log
-            throw (ex);
+            throw;
         }
 
         List<Game> gameList = new List<Game>();
@@ -113,19 +113,19 @@ public class DBservices
             {
                 Game g = new Game();
                 g.AppID = Convert.ToInt32(dataReader["AppID"]);
-                g.Name = dataReader["Name"].ToString();
+                g.Name = dataReader["Name"].ToString() ?? "";
                 g.ReleaseDate = Convert.ToDateTime(dataReader["Release_date"]);
                 g.Price = Convert.ToDouble(dataReader["Price"]);
-                g.Publisher = dataReader["Developers"].ToString();
-                g.HeaderImage = dataReader["Header_image"].ToString();
+                g.Publisher = dataReader["Developers"].ToString() ?? "";
+                g.HeaderImage = dataReader["Header_image"].ToString() ?? "";
                 gameList.Add(g);
             }
             return gameList;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // write to log
-            throw (ex);
+            throw;
         }
         finally
         {
@@ -147,10 +147,10 @@ public class DBservices
         {
             con = connect("myProjDB"); // create the connection
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // write to log
-            throw (ex);
+            throw;
         }
 
         List<Game> gameList = new List<Game>();
@@ -169,19 +169,19 @@ public class DBservices
             {
                 Game g = new Game();
                 g.AppID = Convert.ToInt32(dataReader["AppID"]);
-                g.Name = dataReader["Name"].ToString();
+                g.Name = dataReader["Name"].ToString() ?? "";
                 g.ReleaseDate = Convert.ToDateTime(dataReader["Release_date"]);
                 g.Price = Convert.ToDouble(dataReader["Price"]);
-                g.Publisher = dataReader["Developers"].ToString();
-                g.HeaderImage = dataReader["Header_image"].ToString();
+                g.Publisher = dataReader["Developers"].ToString() ?? "";
+                g.HeaderImage = dataReader["Header_image"].ToString() ?? "";
                 gameList.Add(g);
             }
             return gameList;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // write to log
-            throw (ex);
+            throw;
         }
         finally
         {

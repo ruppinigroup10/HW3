@@ -39,12 +39,12 @@
           $("#userInfo").html(`
             <div>
                 <p>Welcome, ${user.name || user.email}!</p>
-                <a href="index.html" style="color: white; margin-right: 10px;">Home</a>
+                <a href="/Pages/index.html" style="color: white; margin-right: 10px;">Home</a>
                 <button onclick="logout()" class="btn btn-danger">Logout</button>
             </div>
         `);
         } else {
-          window.location.replace("login.html");
+          window.location.replace("/Pages/login.html");
         }
       });
 
@@ -59,7 +59,7 @@
           timer: 1500,
           showConfirmButton: false,
         }).then(() => {
-          window.location.replace("login.html");
+          window.location.replace("/Pages/login.html");
         });
       }
     </script>
@@ -89,7 +89,7 @@
       <div id="userInfo" style="color: white; text-align: right; padding: 10px">
         <!-- User info will be displayed here -->
       </div>
-      <!-- <a href="index.html" style="color: white">HOME</a> -->
+      <!-- <a href="/Pages/index.html" style="color: white">HOME</a> -->
 
       <h1>My Games</h1>
 
