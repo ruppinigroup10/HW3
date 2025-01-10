@@ -4,7 +4,7 @@ let mainD = document.getElementById("main");
 function getAllGames() {
   console.log("in getAllGames");
   // const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games";
-  const api = "https://localhost:7214/api/Games";
+  const api = `https://localhost:${PORT}/api/Games`;
   ajaxCall("GET", api, "", renderGames, errorCB);
   console.log("after ajax");
 }
@@ -86,7 +86,7 @@ mainD.addEventListener("click", (e) => {
     //     console.log("USER Data being sent:", UserToPost); // Log data before sending
 
     //     // const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games";
-    //     const api = "https://localhost:7214/api/Games";
+    //     const api = `https://localhost:${PORT}/api/Games`;
 
     //     const GameUser = { game: GameToPost, user: UserToPost };
     //     ajaxCall("POST", api, JSON.stringify(GameUser), postSCB, postECB);
@@ -141,7 +141,7 @@ mainD.addEventListener("click", (e) => {
 
       console.log("Sending data:", { game: GameToPost, user: UserToPost });
 
-      const api = "https://localhost:7214/api/Games";
+      const api = `https://localhost:${PORT}/api/Games`;
       const GameUser = { game: GameToPost, user: UserToPost };
 
       ajaxCall("POST", api, JSON.stringify(GameUser), postSCB, postECB);
@@ -173,3 +173,42 @@ mainD.addEventListener("click", (e) => {
 
 console.log("enter to func");
 getAllGames();
+
+////////////////////////////////////////////////
+// Check if user is logged in and display info//
+////////////////////////////////////////////////
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (user && user.isLoggedIn) {
+  $("#userInfo").html(`
+          <div>
+              <p>Welcome, ${user.name || user.email}!</p>
+              <a href="/Pages/MyGames.html" style="color: white; margin-right: 10px;">My Games</a>
+              <button onclick="logout()" class="btn btn-danger">Logout</button>
+          </div>
+        `);
+} else {
+  // Show login link for non-logged-in users
+  $("#userInfo").html(`
+          <div>
+              <a href="/Pages/login.html" style="color: white;">Login</a>
+          </div>
+        `);
+}
+
+////////////////////
+// Logout function//
+////////////////////
+function logout() {
+  localStorage.removeItem("user");
+  localStorage.removeItem("userCredentials"); // Remove sensitive info too
+  Swal.fire({
+    title: "Logged Out!",
+    text: "You have been successfully logged out",
+    icon: "success",
+    timer: 1500,
+    showConfirmButton: false,
+  }).then(() => {
+    window.location.replace("/Pages/login.html");
+  });
+}

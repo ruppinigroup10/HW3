@@ -1,3 +1,11 @@
+// Function to fetch all games
+function getGames() {
+  // const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games";
+  const api = `https://localhost:${PORT}/api/Games`;
+  console.log("Making API call to:", api);
+  ajaxCall("GET", api, "", getSCB, getECB);
+}
+
 // Success callback for AJAX calls
 function getSCB(gamesData) {
   console.log("Games data received:", gamesData);
@@ -53,14 +61,6 @@ function renderGames(games) {
   });
 }
 
-// Function to fetch all games
-function getGames() {
-  // const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games";
-  const api = "https://localhost:7214/api/Games";
-  console.log("Making API call to:", api);
-  ajaxCall("GET", api, "", getSCB, getECB);
-}
-
 // Function to delete a game
 function deleteGame(gameId) {
   Swal.fire({
@@ -78,7 +78,7 @@ function deleteGame(gameId) {
       ajaxCall(
         "DELETE",
         // `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/${gameId}`,
-        `https://localhost:7214/api/Games/${gameId}`,
+        `https://localhost:${PORT}/api/Games/${gameId}`,
         null,
         deleteSCB,
         deleteECB
@@ -125,7 +125,7 @@ function filterByPrice() {
   ajaxCall(
     "GET",
     // `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/GetByPrice?minPrice=${minPrice}`,
-    `https://localhost:7214/api/Games/GetByPrice?minPrice=${minPrice}`,
+    `https://localhost:${PORT}/api/Games/GetByPrice?minPrice=${minPrice}`,
     "",
     getSCB, // Using the same success callback
     getECB
@@ -148,7 +148,7 @@ function filterByRank() {
   ajaxCall(
     "GET",
     // `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/GetByRankScore/minRankScore/${minScore}`,
-    `https://localhost:7214/api/Games/GetByRankScore/minRankScore/${minScore}`,
+    `https://localhost:${PORT}/api/Games/GetByRankScore/minRankScore/${minScore}`,
     "",
     getSCB, // Using the same success callback
     getECB
@@ -158,3 +158,37 @@ function filterByRank() {
 $(document).ready(() => {
   getGames();
 });
+
+////////////////////////////////////////////////
+// Check if user is logged in and display info//
+////////////////////////////////////////////////
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (user && user.isLoggedIn) {
+  $("#userInfo").html(`
+            <div>
+                <p>Welcome, ${user.name || user.email}!</p>
+                <a href="/Pages/index.html" style="color: white; margin-right: 10px;">Home</a>
+                <button onclick="logout()" class="btn btn-danger">Logout</button>
+            </div>
+        `);
+} else {
+  window.location.replace("/Pages/login.html");
+}
+
+////////////////////
+// Logout function//
+////////////////////
+function logout() {
+  localStorage.removeItem("user");
+  localStorage.removeItem("userCredentials"); // Remove sensitive info too
+  Swal.fire({
+    title: "Logged Out!",
+    text: "You have been successfully logged out",
+    icon: "success",
+    timer: 1500,
+    showConfirmButton: false,
+  }).then(() => {
+    window.location.replace("/Pages/login.html");
+  });
+}

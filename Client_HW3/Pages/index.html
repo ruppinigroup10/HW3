@@ -21,6 +21,11 @@
     ></script> -->
     <script src="/script/ajaxCall.js" defer></script>
     <!-- <script
+      src="https://proj.ruppin.ac.il/igroup10/test2/tar2/script/port.js"
+      defer
+    ></script> -->
+    <script src="/script/port.js" defer></script>
+    <!-- <script
       src="https://proj.ruppin.ac.il/igroup10/test2/tar2/script/game.js"
       defer
     ></script> -->
@@ -30,44 +35,6 @@
       defer
     ></script> -->
     <script src="/script/main.js" defer></script>
-    <script>
-      $(document).ready(function () {
-        // Check if user is logged in and display info
-        const user = JSON.parse(localStorage.getItem("user"));
-
-        if (user && user.isLoggedIn) {
-          $("#userInfo").html(`
-          <div>
-              <p>Welcome, ${user.name || user.email}!</p>
-              <a href="/Pages/MyGames.html" style="color: white; margin-right: 10px;">My Games</a>
-              <button onclick="logout()" class="btn btn-danger">Logout</button>
-          </div>
-        `);
-        } else {
-          // Show login link for non-logged-in users
-          $("#userInfo").html(`
-          <div>
-              <a href="/Pages/login.html" style="color: white;">Login</a>
-          </div>
-        `);
-        }
-      });
-
-      // Logout function
-      function logout() {
-        localStorage.removeItem("user");
-        localStorage.removeItem("userCredentials"); // Remove sensitive info too
-        Swal.fire({
-          title: "Logged Out!",
-          text: "You have been successfully logged out",
-          icon: "success",
-          timer: 1500,
-          showConfirmButton: false,
-        }).then(() => {
-          window.location.replace("/Pages/login.html");
-        });
-      }
-    </script>
   </head>
   <body>
     <div class="continer">
