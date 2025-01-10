@@ -104,43 +104,31 @@ namespace Server.Models
         public static List<Game> readGame()
         {
             DBservices dbs = new DBservices();
-            Console.WriteLine("in BL before return");
+            Console.WriteLine("in BL readGame before return");
             return dbs.getAllGames();
 
             //return gameList;
 
         }
 
-        // public static List<Game> readMyGame(User user)
-        // {
-        //     DBservices dbs = new DBservices();
-        //     Console.WriteLine("in BL before return");
-        //     return dbs.getAllMyGames(user);
-
-        //     //return gameList;
-
-        // }
-
-        public static List<Game> GetByPrice(double minPrice)
+        public static List<Game> readMyGame(User user)
         {
-            List<Game> returnList = new List<Game>();
-            foreach (var game in gameList)
-            {
-                if (game.Price >= minPrice)
-                    returnList.Add(game);
-            }
-            return returnList;
+            DBservices dbs = new DBservices();
+            Console.WriteLine("in BL readMyGame before return");
+            return dbs.getAllMyGames(user);
         }
 
-        public static List<Game> GetByRankScore(int minScore)
+
+        public static List<Game> filterMyGamesByPrice(User user, double minPrice)
         {
-            List<Game> returnList = new List<Game>();
-            foreach (var game in gameList)
-            {
-                if (game.scoreRank >= minScore)
-                    returnList.Add(game);
-            }
-            return returnList;
+            DBservices dbs = new DBservices();
+            return dbs.filterMyGamesByPrice(user, minPrice);
+        }
+
+        public static List<Game> filterMyGamesByRank(User user, int minRank)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.filterMyGamesByRank(user, minRank);
         }
 
         public static int DeleteById(int id)
@@ -151,5 +139,28 @@ namespace Server.Models
             }
             return gameList.RemoveAll(x => x.AppID == id);// RemoveAll returns the number of elements removed
         }
+
+        //old code before DB
+        // public static List<Game> GetByPrice(double minPrice)
+        // {
+        //     List<Game> returnList = new List<Game>();
+        //     foreach (var game in gameList)
+        //     {
+        //         if (game.Price >= minPrice)
+        //             returnList.Add(game);
+        //     }
+        //     return returnList;
+        // }
+
+        // public static List<Game> GetByRankScore(int minScore)
+        // {
+        //     List<Game> returnList = new List<Game>();
+        //     foreach (var game in gameList)
+        //     {
+        //         if (game.scoreRank >= minScore)
+        //             returnList.Add(game);
+        //     }
+        //     return returnList;
+        // }
     }
 }

@@ -10,8 +10,8 @@ namespace Server.Controllers
     public class GamesController : ControllerBase
     {
         // GET: api/<GamesController>
-        [HttpGet]
-        public ActionResult<IEnumerable<Game>> Get()
+        [HttpGet("GetAllGames")]
+        public ActionResult<IEnumerable<Game>> GetAllGames()
         {
             try
             {
@@ -27,36 +27,62 @@ namespace Server.Controllers
             }
         }
 
-        [HttpGet("GetByPrice")] // query string
-        public IEnumerable<Game> GetByPrice(double minPrice)
+        //get games by user id
+        [HttpGet("GetGamesByUserId/userID/{ID}")]
+        public ActionResult<IEnumerable<Game>> GetGamesByUserId(int ID)
         {
-            return Game.GetByPrice(minPrice);
+            try
+            {
+                Console.WriteLine($"API GetGamesByUserId request received for user {ID}");
+                User user = new User { id = ID };
+                var games = Game.readMyGame(user);
+                Console.WriteLine($"Retrieved {games.Count} games for user {ID}");
+                return Ok(games);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetGamesByUserId: {ex.Message}");
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        [HttpGet("GetByRankScore/minRankScore/{minRankScore}")] // resource routing
-        public IEnumerable<Game> GetByScoreRank(int minRankScore)
+
+        // GET api/<GamesController>/5 filter by price
+        [HttpGet("FilterMyGamesByPrice/{ID}/{minPrice}")]
+        public ActionResult<IEnumerable<Game>> FilterMyGamesByPrice(int ID, double minPrice)
         {
-            return Game.GetByRankScore(minRankScore);
+            try
+            {
+                Console.WriteLine($"API FilterMyGamesByPrice request received for user {ID}");
+                User user = new User { id = ID };
+                var games = Game.filterMyGamesByPrice(user, minPrice);
+                return Ok(games);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in FilterMyGamesByPrice: {ex.Message}");
+                return StatusCode(500, ex.Message);
+            }
         }
 
+        // GET api/<GamesController>/5 filter by rank
+        [HttpGet("FilterMyGamesByRank/{ID}/{minRank}")]
+        public ActionResult<IEnumerable<Game>> FilterMyGamesByRank(int ID, int minRank)
+        {
+            try
+            {
+                Console.WriteLine($"API FilterMyGamesByRank request received for user {ID}");
+                User user = new User { id = ID };
+                var games = Game.filterMyGamesByRank(user, minRank);
+                return Ok(games);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in FilterMyGamesByRank: {ex.Message}");
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-        // [HttpGet("GetGamesByUserId/userID/{ID}")]
-        // public ActionResult<IEnumerable<Game>> GetGamesByUserId(int ID)
-        // {
-        //     try
-        //     {
-        //         Console.WriteLine($"API GetGamesByUserId request received for user {ID}");
-        //         User user = new User { id = ID };
-        //         var games = Game.readMyGame(user);
-        //         Console.WriteLine($"Retrieved {games.Count} games for user {ID}");
-        //         return Ok(games);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         Console.WriteLine($"Error in GetGamesByUserId: {ex.Message}");
-        //         return StatusCode(500, ex.Message);
-        //     }
-        // }
 
 
         // POST api/<GameController>

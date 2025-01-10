@@ -1,7 +1,24 @@
+// Helper function to check user authentication
+function checkUserAuth() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log("Current user:", user);
+  return user && user.id && user.isLoggedIn;
+}
+
+let allGames = []; // Store all games for filtering
+
 // Function to fetch all games
-function getGames() {
-  // const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games";
-  const api = `https://localhost:${PORT}/api/Games`;
+function getMyGames() {
+  if (!checkUserAuth()) {
+    console.log("User auth failed in getMyGames");
+    window.location.replace("/Pages/login.html");
+    return;
+  }
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log("Getting games for user ID:", user.id);
+
+  // const api = `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/GetGamesByUserId/userID/${user.id}`;
+  const api = `https://localhost:${PORT}/api/Games/GetGamesByUserId/userID/${user.id}`;
   console.log("Making API call to:", api);
   ajaxCall("GET", api, "", getSCB, getECB);
 }
@@ -9,38 +26,67 @@ function getGames() {
 // Success callback for AJAX calls
 function getSCB(gamesData) {
   console.log("Games data received:", gamesData);
-  if (gamesData) {
-    console.log("Rendering games...");
-    renderGames(gamesData);
+  if (gamesData && Array.isArray(gamesData)) {
+    // Add validation
+    console.log(`Processing ${gamesData.length} games for user`);
+    allGames = [...gamesData]; // Make a copy to ensure data integrity
+    renderGames(allGames);
   } else {
-    console.error("No games data received");
+    console.error("Invalid games data received");
+    allGames = []; // Reset allGames if invalid data
+    renderGames([]); // Render empty state
+    Swal.fire({
+      title: "Error!",
+      text: "Failed to load games data correctly",
+      icon: "error",
+    });
   }
 }
 
 // Error callback for AJAX calls
 function getECB(err) {
   console.error("Error occurred:", err);
+  Swal.fire({
+    title: "Error!",
+    text: "Failed to load games",
+    icon: "error",
+  });
 }
 
 // Main renderGames function to display games
 function renderGames(games) {
+  if (!Array.isArray(games)) {
+    console.error("Invalid games data passed to renderGames");
+    return;
+  }
+
   const mainDiv = document.getElementById("main");
   if (!mainDiv) {
     console.error("Main div not found");
     return;
   }
 
+  console.log(`Rendering ${games.length} games`);
   mainDiv.innerHTML = ""; // Clear current content
 
+  if (games.length === 0) {
+    mainDiv.innerHTML = '<div class="no-games">No games found</div>';
+    return;
+  }
+
   games.forEach((game) => {
-    //console.log("Game object properties:", Object.keys(game)); // This will show us the actual property names
-    //console.log("Full game object:", game); // This will show us the full object
+    if (!game || !game.AppID) {
+      // Validate each game object
+      console.error("Invalid game object:", game);
+      return;
+    }
+
     const gameDiv = document.createElement("div");
     gameDiv.classList.add("card");
 
     gameDiv.innerHTML = `
             <img src="${game.HeaderImage || "placeholder-image.jpg"}" alt="${
-      game.Name
+      game.Name || "Game"
     }">
             <h3>${game.Name || "Untitled Game"}</h3>
             <h4>Release Date: ${
@@ -48,10 +94,8 @@ function renderGames(games) {
               "Release date not available"
             }</h4>
             <h4>Developer: ${game.Publisher || "Developer unknown"}</h4>
-            <h4 id="priceFilter">Price: ${
-              game.Price ? game.Price + "$" : 0
-            }</h4>
-            <h4 id="rankFilter">Rank: ${parseInt(game.ScoreRank) || 0}</h4>
+            <h4>Price: ${game.Price ? game.Price + "$" : "Free"}</h4>
+            <h4>Rank: ${game.ScoreRank || 0}</h4>
             <button type="button" onclick="deleteGame(${
               game.AppID
             })">Delete Game</button>
@@ -86,15 +130,17 @@ function deleteGame(gameId) {
     }
   });
 
-  function deleteSCB(response) {
+  function deleteSCB(response, gameId) {
     if (response.message) {
       Swal.fire({
         title: "Deleted!",
         text: response.message,
         icon: "success",
       });
+      // Update allGames by removing the deleted game
+      allGames = allGames.filter((game) => game.AppID !== gameId);
+      renderGames(allGames);
     }
-    getGames(); // Refresh the list after successful deletion
   }
 
   function deleteECB(error) {
@@ -109,72 +155,24 @@ function deleteGame(gameId) {
   }
 }
 
-// Function to filter games by price
-function filterByPrice() {
-  const minPrice = document.getElementById("priceFilter").value;
-  if (!minPrice) {
-    console.warn("No minimum price specified");
-    Swal.fire({
-      title: "No value?",
-      text: "Please enter a minimum price to filter games",
-      icon: "question",
-    });
-    return;
-  }
-
-  ajaxCall(
-    "GET",
-    // `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/GetByPrice?minPrice=${minPrice}`,
-    `https://localhost:${PORT}/api/Games/GetByPrice?minPrice=${minPrice}`,
-    "",
-    getSCB, // Using the same success callback
-    getECB
-  );
-}
-
-// Function to filter games by rank
-function filterByRank() {
-  const minScore = document.getElementById("rankFilter").value;
-  if (!minScore) {
-    console.warn("No minimum score specified");
-    Swal.fire({
-      title: "No value?",
-      text: "Please enter a minimum score to filter games",
-      icon: "question",
-    });
-    return;
-  }
-
-  ajaxCall(
-    "GET",
-    // `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/GetByRankScore/minRankScore/${minScore}`,
-    `https://localhost:${PORT}/api/Games/GetByRankScore/minRankScore/${minScore}`,
-    "",
-    getSCB, // Using the same success callback
-    getECB
-  );
-}
-
 $(document).ready(() => {
-  getGames();
-});
-
-////////////////////////////////////////////////
-// Check if user is logged in and display info//
-////////////////////////////////////////////////
-const user = JSON.parse(localStorage.getItem("user"));
-
-if (user && user.isLoggedIn) {
-  $("#userInfo").html(`
+  ////////////////////////////////////////////////
+  // Check if user is logged in and display info//
+  ////////////////////////////////////////////////
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user && user.isLoggedIn) {
+    $("#userInfo").html(`
             <div>
                 <p>Welcome, ${user.name || user.email}!</p>
                 <a href="/Pages/index.html" style="color: white; margin-right: 10px;">Home</a>
                 <button onclick="logout()" class="btn btn-danger">Logout</button>
             </div>
         `);
-} else {
-  window.location.replace("/Pages/login.html");
-}
+    getMyGames();
+  } else {
+    window.location.replace("/Pages/login.html");
+  }
+});
 
 ////////////////////
 // Logout function//
@@ -191,4 +189,102 @@ function logout() {
   }).then(() => {
     window.location.replace("/Pages/login.html");
   });
+}
+
+//////////////////////////////////////
+// Function to filter games by price//
+//////////////////////////////////////
+function filterByPrice() {
+  if (!checkUserAuth()) {
+    console.log("User auth failed in filterByPrice");
+    window.location.replace("/Pages/login.html");
+    return;
+  }
+
+  const minPriceInput = document.getElementById("priceFilter");
+  const minPrice = minPriceInput.value;
+  console.log("Filtering by price:", minPrice);
+
+  if (!minPrice && minPrice !== "0") {
+    console.warn("No minimum price specified");
+    Swal.fire({
+      title: "No value?",
+      text: "Please enter a minimum price to filter games",
+      icon: "question",
+    });
+    return;
+  }
+
+  const rankInput = document.getElementById("rankFilter");
+  const rankValue = rankInput.value;
+
+  let filteredGames;
+
+  // If we have both filters
+  if (rankValue) {
+    console.log("Filtering by both price and rank");
+    filteredGames = allGames.filter(
+      (game) =>
+        game.Price >= parseFloat(minPrice) &&
+        game.ScoreRank >= parseInt(rankValue)
+    );
+  } else {
+    // Only filter by price
+    console.log("Filtering only by price");
+    filteredGames = allGames.filter(
+      (game) => game.Price >= parseFloat(minPrice)
+    );
+  }
+
+  console.log("Filtered games:", filteredGames);
+  renderGames(filteredGames);
+}
+
+/////////////////////////////////////
+// Function to filter games by rank//
+/////////////////////////////////////
+function filterByRank() {
+  if (!checkUserAuth()) {
+    console.log("User auth failed in filterByRank");
+    window.location.replace("/Pages/login.html");
+    return;
+  }
+
+  const minRankInput = document.getElementById("rankFilter");
+  const minRank = minRankInput.value;
+  console.log("Filtering by rank:", minRank);
+
+  if (!minRank && minRank !== "0") {
+    console.warn("No minimum rank specified");
+    Swal.fire({
+      title: "No value?",
+      text: "Please enter a minimum rank score to filter games",
+      icon: "question",
+    });
+    return;
+  }
+
+  const priceInput = document.getElementById("priceFilter");
+  const priceValue = priceInput.value;
+
+  let filteredGames;
+
+  // If we have both filters
+  if (priceValue) {
+    console.log("Filtering by both price and rank");
+    filteredGames = allGames.filter(
+      (game) =>
+        game.ScoreRank >= parseInt(minRank) &&
+        game.Price >= parseFloat(priceValue)
+    );
+  } else {
+    // Only filter by rank
+    console.log("Filtering only by rank");
+    filteredGames = allGames.filter(
+      (game) => game.ScoreRank >= parseInt(minRank)
+    );
+  }
+
+  console.log("Filtered games:", filteredGames);
+  renderGames(filteredGames);
 }

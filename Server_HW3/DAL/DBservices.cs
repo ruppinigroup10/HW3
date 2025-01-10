@@ -38,7 +38,7 @@ public class DBservices
     }
 
     //--------------------------------------------------------------------------------------------------
-    // This method inserts a car to the cars table 
+    // This method insert game to the database 
     //--------------------------------------------------------------------------------------------------
     public int InsertGame(GameUser gameUser)
     {
@@ -84,6 +84,9 @@ public class DBservices
 
     }
 
+    //--------------------------------------------------------------------------------------------------
+    // This method geting all games from the database
+    //--------------------------------------------------------------------------------------------------
     public List<Game> getAllGames()
     {
 
@@ -118,6 +121,7 @@ public class DBservices
                 g.Price = Convert.ToDouble(dataReader["Price"]);
                 g.Publisher = dataReader["Developers"].ToString() ?? "";
                 g.HeaderImage = dataReader["Header_image"].ToString() ?? "";
+                g.ScoreRank = Convert.ToInt32(dataReader["Score_rank"]);
                 gameList.Add(g);
             }
             return gameList;
@@ -137,65 +141,273 @@ public class DBservices
         }
     }
 
-    // public List<Game> getAllMyGames(User user)
-    // {
+    //--------------------------------------------------------------------------------------------------
+    // This method geting my games from the database
+    //--------------------------------------------------------------------------------------------------
 
-    //     SqlConnection con;
-    //     SqlCommand cmd;
+    public List<Game> getAllMyGames(User user)
+    {
 
-    //     try
-    //     {
-    //         con = connect("myProjDB"); // create the connection
-    //     }
-    //     catch (Exception)
-    //     {
-    //         // write to log
-    //         throw;
-    //     }
+        SqlConnection con;
+        SqlCommand cmd;
 
-    //     List<Game> gameList = new List<Game>();
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception)
+        {
+            // write to log
+            throw;
+        }
 
-    //     Dictionary<string, object> paramDic = new Dictionary<string, object>();
-    //     paramDic.Add("@ID", user.id);
+        List<Game> gameList = new List<Game>();
 
-    //     cmd = CreateCommandWithStoredProcedureGeneral("SP_ShowAllMyGames", con, paramDic);
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@ID", user.id);
 
-    //     try
-    //     {
+        cmd = CreateCommandWithStoredProcedureGeneral("SP_ShowAllMyGames", con, paramDic);
 
-    //         SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+        try
+        {
 
-    //         while (dataReader.Read())
-    //         {
-    //             Game g = new Game();
-    //             g.AppID = Convert.ToInt32(dataReader["AppID"]);
-    //             g.Name = dataReader["Name"].ToString() ?? "";
-    //             g.ReleaseDate = Convert.ToDateTime(dataReader["Release_date"]);
-    //             g.Price = Convert.ToDouble(dataReader["Price"]);
-    //             g.Publisher = dataReader["Developers"].ToString() ?? "";
-    //             g.HeaderImage = dataReader["Header_image"].ToString() ?? "";
-    //             gameList.Add(g);
-    //         }
-    //         return gameList;
-    //     }
-    //     catch (Exception)
-    //     {
-    //         // write to log
-    //         throw;
-    //     }
-    //     finally
-    //     {
-    //         if (con != null)
-    //         {
-    //             // close the db connection
-    //             con.Close();
-    //         }
-    //     }
-    // }
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                Game g = new Game();
+                g.AppID = Convert.ToInt32(dataReader["AppID"]);
+                g.Name = dataReader["Name"].ToString() ?? "";
+                g.ReleaseDate = Convert.ToDateTime(dataReader["Release_date"]);
+                g.Price = Convert.ToDouble(dataReader["Price"]);
+                g.Publisher = dataReader["Developers"].ToString() ?? "";
+                g.HeaderImage = dataReader["Header_image"].ToString() ?? "";
+                g.ScoreRank = Convert.ToInt32(dataReader["Score_rank"]);
+                gameList.Add(g);
+            }
+            return gameList;
+        }
+        catch (Exception)
+        {
+            // write to log
+            throw;
+        }
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
 
     //---------------------------------------------------------------------------------
     // Create the SqlCommand
     //---------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------------------------
+    // This method register user to the database
+    //--------------------------------------------------------------------------------------------------
+    public User? RegisterUser(string name, string email, string password)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+        User? user = null;
+
+        try
+        {
+            con = connect("myProjDB");
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Database connection error: " + ex.Message);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@Name", name);
+        paramDic.Add("@Email", email);
+        paramDic.Add("@Password", password);
+
+        cmd = CreateCommandWithStoredProcedureGeneral("SP_RegisterUser", con, paramDic);
+
+        try
+        {
+            using (SqlDataReader dr = cmd.ExecuteReader())
+            {
+                if (dr.Read())
+                {
+                    user = new User
+                    {
+                        id = Convert.ToInt32(dr["ID"]),
+                        name = dr["Name"].ToString(),
+                        email = dr["Email"].ToString()
+                    };
+                }
+            }
+            return user;
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Message.Contains("Email already exists"))
+            {
+                throw new Exception("Email already exists");
+            }
+            throw new Exception("Registration failed");
+        }
+        finally
+        {
+            if (con != null && con.State == System.Data.ConnectionState.Open)
+            {
+                con.Close();
+            }
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method login user to the database
+    //--------------------------------------------------------------------------------------------------
+    public User? LoginUser(string email, string password)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+        User? user = null;
+
+        try
+        {
+            con = connect("myProjDB");
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Database connection error: " + ex.Message);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@Email", email);
+        paramDic.Add("@Password", password);
+
+        cmd = CreateCommandWithStoredProcedureGeneral("SP_LoginUser", con, paramDic);
+
+        try
+        {
+            using (SqlDataReader dr = cmd.ExecuteReader())
+            {
+                if (dr.Read())
+                {
+                    user = new User
+                    {
+                        id = Convert.ToInt32(dr["ID"]),
+                        name = dr["Name"].ToString(),
+                        email = dr["Email"].ToString()
+                    };
+                }
+            }
+            return user;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Login failed: " + ex.Message);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method filter by price
+    //--------------------------------------------------------------------------------------------------
+
+    public List<Game> filterMyGamesByPrice(User user, double minPrice)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@ID", user.id);
+        paramDic.Add("@MinPrice", minPrice);
+
+        cmd = CreateCommandWithStoredProcedureGeneral("SP_FilterMyGamesByPrice", con, paramDic);
+
+        return ExecuteGameReader(cmd, con);
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method filter by rank
+    //--------------------------------------------------------------------------------------------------
+
+    public List<Game> filterMyGamesByRank(User user, int minRank)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@ID", user.id);
+        paramDic.Add("@MinRank", minRank);
+
+        cmd = CreateCommandWithStoredProcedureGeneral("SP_FilterMyGamesByRank", con, paramDic);
+
+        return ExecuteGameReader(cmd, con);
+    }
+
+
+    //--------------------------------------------------------------------------------------------------
+    // Helper method to avoid code duplication for filterMyGamesByPrice and filterMyGamesByRank
+    //--------------------------------------------------------------------------------------------------
+    private List<Game> ExecuteGameReader(SqlCommand cmd, SqlConnection con)
+    {
+        List<Game> gameList = new List<Game>();
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                Game g = new Game();
+                g.AppID = Convert.ToInt32(dataReader["AppID"]);
+                g.Name = dataReader["Name"].ToString() ?? "";
+                g.ReleaseDate = Convert.ToDateTime(dataReader["Release_date"]);
+                g.Price = Convert.ToDouble(dataReader["Price"]);
+                g.Publisher = dataReader["Developers"].ToString() ?? "";
+                g.HeaderImage = dataReader["Header_image"].ToString() ?? "";
+                g.ScoreRank = Convert.ToInt32(dataReader["Score_rank"]);
+                gameList.Add(g);
+            }
+            return gameList;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
     private SqlCommand CreateCommandWithStoredProcedureGeneral(String spName, SqlConnection con, Dictionary<string, object> paramDic)
     {
 

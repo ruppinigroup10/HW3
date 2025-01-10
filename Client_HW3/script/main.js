@@ -3,19 +3,19 @@ let mainD = document.getElementById("main");
 // Function to get and render all games
 function getAllGames() {
   console.log("in getAllGames");
-  // const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games";
-  const api = `https://localhost:${PORT}/api/Games`;
-  ajaxCall("GET", api, "", renderGames, errorCB);
+  // const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/GetAllGames";
+  const api = `https://localhost:${PORT}/api/Games/GetAllGames`;
+  ajaxCall("GET", api, "", renderAllGames, errorCB);
   console.log("after ajax");
 }
 
 // Render games function (same logic as your original forEach)
-function renderGames(games) {
-  console.log("games recived:", games);
+function renderAllGames(games) {
+  //console.log("games recived:", games);
   mainD.innerHTML = ""; // Clear existing content
-
+  //console.log("Number of games to render:", games.length);
   games.forEach((game) => {
-    //console.log("in game:", game);
+    //console.log("Rendering game:", game);
     const gameDiv = document.createElement("div");
     gameDiv.classList.add("card");
 
@@ -24,6 +24,7 @@ function renderGames(games) {
     gameDiv.innerHTML += `<h4>${game.ReleaseDate}</h4>`;
     gameDiv.innerHTML += `<h4>${game.Publisher}</h4>`;
     gameDiv.innerHTML += `<h4>${game.Price}$</h4>`;
+    gameDiv.innerHTML += `<h4>Rank: ${game.ScoreRank}</h4>`;
     gameDiv.innerHTML += `<button type="button" id="${game.AppID}">Add to MyGAMES</button>`;
 
     mainD.appendChild(gameDiv);
@@ -171,14 +172,15 @@ mainD.addEventListener("click", (e) => {
   }
 });
 
-console.log("enter to func");
-getAllGames();
+$(document).ready(() => {
+  console.log("enter to func");
+  getAllGames();
+});
 
 ////////////////////////////////////////////////
 // Check if user is logged in and display info//
 ////////////////////////////////////////////////
 const user = JSON.parse(localStorage.getItem("user"));
-
 if (user && user.isLoggedIn) {
   $("#userInfo").html(`
           <div>

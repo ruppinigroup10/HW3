@@ -9,11 +9,11 @@ namespace Server.Controllers
     {
 
         // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<User> Get()
-        {
-            return Server.Models.User.readUser();
-        }
+        // [HttpGet]
+        // public IEnumerable<User> Get()
+        // {
+        //     return Server.Models.User.readUser();
+        // }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
@@ -22,68 +22,54 @@ namespace Server.Controllers
             return "value";
         }
 
-        // POST api/<UsersController>
-        [HttpPost]
-        public Boolean Post([FromBody] User user)
-        {
-            return user.insertUser();
-        }
-
+        //Post api/<UsersController>/Register
         [HttpPost("Register")]
-        public IActionResult Register([FromBody] User user)
+        public IActionResult Register([FromBody] Server.Models.User user)
         {
-            int result = Server.Models.User.Register(user.name, user.email, user.password);
-            if (result == -1)
+            try
             {
-                return Conflict(new { message = "Email already exists." });
+                var newUser = Server.Models.User.Register(user.name, user.email, user.password);
+
+                if (newUser != null)
+                {
+                    return Ok(new
+                    {
+                        message = "Registration successful",
+                        user = newUser
+                    });
+                }
+                return BadRequest(new { message = "Registration failed" });
             }
-            else
-            if (result == 0)
+            catch (Exception ex)
             {
-                return BadRequest(new { message = "User registration failed." });
-            }
-            else
-            {
-                return Ok(new { message = "Registered successfuly" });
+                if (ex.Message.Contains("Email already exists"))
+                {
+                    return BadRequest(new { message = "Email already exists" });
+                }
+                return BadRequest(new { message = "Registration failed" });
             }
         }
-
-        // [HttpPost("Register")]
-        // public IActionResult Register([FromBody] string Name, string Email, string Password)
-        // {
-        //     User user = new User();
-        //     int result = Server.Models.User.Register(Name, Email, Password);
-        //     if (result == -1)
-        //     {
-        //         return Conflict("User already exists.");
-        //     }
-        //     else
-        //     if (result == 0)
-        //     {
-        //         return BadRequest("User registration failed.");
-        //     }
-        //     else
-        //     {
-        //         return Ok("User registered successfully.");
-        //     }
-        // }
-
+        //Post api/<UsersController>/Login
         [HttpPost("Login")]
         public IActionResult Login([FromBody] User user)
         {
-            int res = Server.Models.User.Login(user.email, user.password);
+            try
+            {
+                var loggedInUser = Server.Models.User.Login(user.email, user.password);
 
-            if (res == -1)
-            {
-                return BadRequest(new { message = "Invalid user" });
+                if (loggedInUser != null)
+                {
+                    return Ok(new
+                    {
+                        message = "Login successful",
+                        user = loggedInUser
+                    });
+                }
+                return BadRequest(new { message = "Invalid email or password" });
             }
-            if (res == 0)
+            catch (Exception)
             {
-                return Conflict(new { message = "Wrong password" });
-            }
-            else // res == 1
-            {
-                return Ok(new { message = "Login successful" });
+                return BadRequest(new { message = "Login failed" });
             }
         }
 
