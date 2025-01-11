@@ -179,16 +179,12 @@ $(document).ready(() => {
   ////////////////////////////////////////////////
   const user = JSON.parse(localStorage.getItem("user"));
   if (user && user.isLoggedIn) {
-    $("#userName").html(`
-    
-          <div style="display: flex; justify-content: center; padding: 10px;">
+    $("#userInfo").html(`
+            <div style="display: flex; justify-content: center; padding: 10px;">
           <span class="home-link" style="background: rgba(255, 255, 255, 0.1);">
           Welcome, ${user.name || user.email}
           </span>
           </div>
-        `);
-    $("#userLinks").html(`
-            
             <a href="/Pages/index.html" class="home-link">
               <i class="fas fa-gamepad"></i>Home
             </a>
