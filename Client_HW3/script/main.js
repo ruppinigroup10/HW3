@@ -123,14 +123,17 @@ $(document).ready(() => {
 // Check if user is logged in and display info//
 ////////////////////////////////////////////////
 
+// <a href="/Pages/MyGames.html" class="home-link">
+//<a href="/Pages/editProfile.html" class="home-link"></a>
 const user = JSON.parse(localStorage.getItem("user"));
 if (user && user.isLoggedIn) {
   $("#userLinks").html(`
     
-          <a href="/Pages/MyGames.html" class="home-link">
+          <a href="https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/MyGames.html" class="home-link">
+          
             <i class="fas fa-gamepad"></i>My Games
           </a>
-          <a href="/Pages/editProfile.html" class="home-link">
+          <a href="https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/editProfile.html" class="home-link">
             <i class="fas fa-user-edit"></i>Edit Profile
           </a>
           <a href="#" onclick="logout()" class="home-link">
@@ -146,9 +149,10 @@ if (user && user.isLoggedIn) {
           </div>
         `);
 } else {
+  //<a href="/Pages/login.html" class="home-link">
   // Show login link for non-logged-in users
   $("#userInfo").html(`
-          <a href="/Pages/login.html" class="home-link">
+          <a href="https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html" class="home-link">
             <i class="fas fa-sign-in-alt"></i>Login
           </a>
         `);
@@ -167,6 +171,9 @@ function logout() {
     timer: 1500,
     showConfirmButton: false,
   }).then(() => {
-    window.location.replace("/Pages/login.html");
+    window.location.replace(
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html"
+    );
+    // window.location.replace("/Pages/login.html");
   });
 }

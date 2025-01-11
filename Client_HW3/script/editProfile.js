@@ -2,7 +2,10 @@ $(document).ready(() => {
   // Check if user is logged in
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
-    window.location.replace("/Pages/login.html");
+    // window.location.replace("/Pages/login.html");
+    window.location.replace(
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html"
+    );
     return;
   }
 
@@ -144,7 +147,9 @@ function updateSuccessCB(result) {
     timer: 1500,
     showConfirmButton: false,
   }).then(() => {
-    window.location.href = "/Pages/index.html";
+    window.location.href =
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/index.html";
+    // window.location.href = "/Pages/index.html";
   });
 }
 

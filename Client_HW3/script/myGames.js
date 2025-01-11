@@ -17,7 +17,10 @@ let allGames = []; // Store all games for filtering
 function getMyGames() {
   if (!checkUserAuth()) {
     console.log("User auth failed in getMyGames");
-    window.location.replace("/Pages/login.html");
+    window.location.replace(
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html"
+    );
+    //window.location.replace("/Pages/login.html");
     return;
   }
   const user = JSON.parse(localStorage.getItem("user"));
@@ -121,7 +124,10 @@ function deleteGame(gameId) {
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user || !user.id) {
     console.log("User not logged in");
-    window.location.replace("/Pages/login.html");
+    window.location.replace(
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html"
+    );
+    // window.location.replace("/Pages/login.html");
     return;
   }
 
@@ -181,6 +187,8 @@ $(document).ready(() => {
   // Check if user is logged in and display info//
   ////////////////////////////////////////////////
 
+  //<a href="/Pages/index.html" class="home-link">
+
   const user = JSON.parse(localStorage.getItem("user"));
   if (user && user.isLoggedIn) {
     $("#userInfo").html(`
@@ -189,7 +197,8 @@ $(document).ready(() => {
           Welcome, ${user.name || user.email}
           </span>
           </div>
-            <a href="/Pages/index.html" class="home-link">
+            <a href="https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/index.html" class="home-link">
+            
               <i class="fas fa-gamepad"></i>Home
             </a>
             <a href="#" onclick="logout()" class="home-link">
@@ -199,7 +208,10 @@ $(document).ready(() => {
 
     getMyGames();
   } else {
-    window.location.replace("/Pages/login.html");
+    window.location.replace(
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html"
+    );
+    //window.location.replace("/Pages/login.html");
   }
 });
 
@@ -217,7 +229,10 @@ function logout() {
     timer: 1500,
     showConfirmButton: false,
   }).then(() => {
-    window.location.replace("/Pages/login.html");
+    window.location.replace(
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html"
+    );
+    //window.location.replace("/Pages/login.html");
   });
 }
 
@@ -228,7 +243,10 @@ function logout() {
 function filterByPrice() {
   if (!checkUserAuth()) {
     console.log("User auth failed in filterByPrice");
-    window.location.replace("/Pages/login.html");
+    window.location.replace(
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html"
+    );
+    //window.location.replace("/Pages/login.html");
     return;
   }
 
@@ -278,7 +296,10 @@ function filterByPrice() {
 function filterByRank() {
   if (!checkUserAuth()) {
     console.log("User auth failed in filterByRank");
-    window.location.replace("/Pages/login.html");
+    window.location.replace(
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html"
+    );
+    //window.location.replace("/Pages/login.html");
     return;
   }
 

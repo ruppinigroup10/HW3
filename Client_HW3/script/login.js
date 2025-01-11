@@ -76,7 +76,10 @@ function lscb(result) {
     timer: 1500,
     showConfirmButton: false,
   }).then(() => {
-    window.location.replace("/Pages/index.html");
+    window.location.replace(
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/index.html"
+    );
+    //window.location.replace("/Pages/index.html");
   });
 }
 
@@ -139,7 +142,10 @@ function rscb(result) {
     timer: 1500,
     showConfirmButton: false,
   }).then(() => {
-    window.location.replace("/Pages/index.html");
+    window.location.replace(
+      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/index.html"
+    );
+    //window.location.replace("/Pages/index.html");
   });
 }
 
