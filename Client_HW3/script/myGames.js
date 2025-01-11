@@ -26,7 +26,7 @@ function getMyGames() {
   const user = JSON.parse(localStorage.getItem("user"));
   console.log("Getting games for user ID:", user.id);
 
-  const api = config.getApiUrl(`Games/GetGamesByUserId/userID/${user.id}`);
+  const api = `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/GetGamesByUserId/userID/${user.id}`;
   console.log("Making API call to:", api);
   ajaxCall("GET", api, "", getSCB, getECB);
 }
@@ -143,7 +143,7 @@ function deleteGame(gameId) {
     if (result.isConfirmed) {
       console.log("Initiating delete for game:", gameId);
 
-      const api = config.getApiUrl(`Games/${user.id}/${gameId}`);
+      const api = `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/${user.id}/${gameId}`;
 
       ajaxCall("DELETE", api, null, deleteSCB, deleteECB);
     }

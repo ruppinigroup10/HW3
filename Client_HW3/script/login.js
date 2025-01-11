@@ -38,9 +38,10 @@ $("#login").submit(function () {
     password: $("#log_password").val(),
   };
 
-  const api = config.getApiUrl("Users/Login");
+  const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Login";
 
   console.log("Attempting login with:", user);
+  console.log("api:", api);
 
   ajaxCall("POST", api, JSON.stringify(user), lscb, lecb);
   return false;
@@ -106,7 +107,8 @@ $("#Register").submit(function () {
     password: $("#reg_password").val(),
   };
 
-  const api = config.getApiUrl("Users/Register");
+  const api =
+    "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Register";
   console.log("Sending registration data:", user);
 
   ajaxCall("POST", api, JSON.stringify(user), rscb, recb);
