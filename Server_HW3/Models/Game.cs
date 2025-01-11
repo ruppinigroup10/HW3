@@ -131,13 +131,23 @@ namespace Server.Models
             return dbs.filterMyGamesByRank(user, minRank);
         }
 
-        public static int DeleteById(int id)
+        public static int DeleteById(int userId, int gameId)
         {
-            if (id < 0)
+            try
             {
-                throw new Exception($"Invalid ID: {id}");
+                DBservices dbs = new DBservices();
+                GameUser gameUser = new GameUser
+                {
+                    user = new User { id = userId },
+                    game = new Game { AppID = gameId }
+                };
+
+                return dbs.DeleteById(gameUser);  // Will return 1 or -1
             }
-            return gameList.RemoveAll(x => x.AppID == id);// RemoveAll returns the number of elements removed
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         //old code before DB
@@ -161,6 +171,15 @@ namespace Server.Models
         //             returnList.Add(game);
         //     }
         //     return returnList;
+        // }
+
+        // public static int DeleteById(int id)
+        // {
+        //     if (id < 0)
+        //     {
+        //         throw new Exception($"Invalid ID: {id}");
+        //     }
+        //     return gameList.RemoveAll(x => x.AppID == id);// RemoveAll returns the number of elements removed
         // }
     }
 }

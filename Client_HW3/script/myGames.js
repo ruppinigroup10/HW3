@@ -105,8 +105,18 @@ function renderGames(games) {
   });
 }
 
-// Function to delete a game
+//////////////////////////////
+// Function to delete a game//
+//////////////////////////////
+
 function deleteGame(gameId) {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user || !user.id) {
+    console.log("User not logged in");
+    window.location.replace("/Pages/login.html");
+    return;
+  }
+
   Swal.fire({
     title: "Are you sure?",
     text: "You won't be able to revert this!",
@@ -121,8 +131,8 @@ function deleteGame(gameId) {
 
       ajaxCall(
         "DELETE",
-        // `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/${gameId}`,
-        `https://localhost:${PORT}/api/Games/${gameId}`,
+        // `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/${user.id}/${gameId}`,
+        `https://localhost:${PORT}/api/Games/${user.id}/${gameId}`,
         null,
         deleteSCB,
         deleteECB
@@ -130,7 +140,7 @@ function deleteGame(gameId) {
     }
   });
 
-  function deleteSCB(response, gameId) {
+  function deleteSCB(response) {
     if (response.message) {
       Swal.fire({
         title: "Deleted!",
@@ -138,18 +148,26 @@ function deleteGame(gameId) {
         icon: "success",
       });
       // Update allGames by removing the deleted game
-      allGames = allGames.filter((game) => game.AppID !== gameId);
-      renderGames(allGames);
+      if (Array.isArray(allGames)) {
+        allGames = allGames.filter((game) => game.AppID !== gameId);
+        renderGames(allGames);
+      }
     }
   }
 
   function deleteECB(error) {
     console.error("Delete failed:", error);
+    let errorMessage = "Failed to delete game";
+
+    if (error.responseJSON && error.responseJSON.message) {
+      errorMessage = error.responseJSON.message;
+    } else if (error.status === 500) {
+      errorMessage = "Server error occurred while deleting the game";
+    }
+
     Swal.fire({
       title: "Error!",
-      text: error.responseJSON
-        ? error.responseJSON.message
-        : "Failed to delete game",
+      text: errorMessage,
       icon: "error",
     });
   }

@@ -112,25 +112,49 @@ namespace Server.Controllers
         }
 
         // DELETE api/<GamesController>/5
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{userId}/{gameId}")]
+        public IActionResult Delete(int userId, int gameId)
         {
             try
             {
-                int result = Game.DeleteById(id);
-                if (result == 0)
+                int result = Game.DeleteById(userId, gameId);
+
+                switch (result)
                 {
-                    return BadRequest(new { message = $"Game with ID {id} not found." });
-                }
-                else
-                {
-                    return Ok(new { message = $"Game with ID {id} deleted successfully." });
+                    case 1:  // Success
+                        return Ok(new { message = $"Game with ID {gameId} deleted successfully." });
+                    case -1: // Not found or failed
+                        return NotFound(new { message = $"Game with ID {gameId} not found for this user." });
+                    default: // Unexpected result
+                        return BadRequest(new { message = "An unexpected error occurred." });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest(new { message = $"Invalid ID: {id}" });
+                return BadRequest(new { message = ex.Message });
             }
         }
+
+        //old delete method
+        // [HttpDelete("{id}")]
+        // public IActionResult Delete(int id)
+        // {
+        //     try
+        //     {
+        //         int result = Game.DeleteById(id);
+        //         if (result == 0)
+        //         {
+        //             return BadRequest(new { message = $"Game with ID {id} not found." });
+        //         }
+        //         else
+        //         {
+        //             return Ok(new { message = $"Game with ID {id} deleted successfully." });
+        //         }
+        //     }
+        //     catch (Exception)
+        //     {
+        //         return BadRequest(new { message = $"Invalid ID: {id}" });
+        //     }
+        // }
     }
 }

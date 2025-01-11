@@ -202,9 +202,6 @@ public class DBservices
         }
     }
 
-    //---------------------------------------------------------------------------------
-    // Create the SqlCommand
-    //---------------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------------------------------
     // This method register user to the database
@@ -408,6 +405,11 @@ public class DBservices
             }
         }
     }
+
+    //---------------------------------------------------------------------------------
+    // Create the SqlCommand
+    //---------------------------------------------------------------------------------
+
     private SqlCommand CreateCommandWithStoredProcedureGeneral(String spName, SqlConnection con, Dictionary<string, object> paramDic)
     {
 
@@ -432,10 +434,53 @@ public class DBservices
         return cmd;
     }
 
+    //--------------------------------------------------------------------------------------------------
+    // Delete game from the database method 
+    //--------------------------------------------------------------------------------------------------
+    public int DeleteById(GameUser gameUser)
+    {
 
-    //--------------------------------------------------------------------
-    // TODO Build the FLight Delete  method
-    // DeleteFlight(int id)
-    //--------------------------------------------------------------------
+        SqlConnection con;
+        SqlCommand cmd;
 
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception)
+        {
+            // write to log
+            throw;
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@ID", gameUser.user.id);
+        paramDic.Add("@AppID", gameUser.game.AppID);
+
+        cmd = CreateCommandWithStoredProcedureGeneral("SP_DeleteGame", con, paramDic);          // create the command
+
+        try
+        {
+            // Execute the SP and get its return value
+            cmd.Parameters.Add("@ReturnValue", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+            cmd.ExecuteNonQuery();
+            int result = (int)cmd.Parameters["@ReturnValue"].Value;
+            return result;  // Will return 1 or -1 from the SP
+        }
+        catch (Exception)
+        {
+            // write to log
+            throw;
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
 }

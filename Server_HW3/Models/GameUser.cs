@@ -6,6 +6,11 @@ namespace Server_HW3.Models
     {
         public Game game { get; set; }
         public User user { get; set; }
+        public GameUser()
+        {
+            this.game = new Game();
+            this.user = new User();
+        }
 
         public GameUser(Game game, User user)
         {
