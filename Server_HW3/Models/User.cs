@@ -59,6 +59,12 @@
             return dbs.LoginUser(email, password);
         }
 
+        public static User? UpdateProfile(int id, string name, string email, string password)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.UpdateUserInfo(id, name, email, password);
+        }
+
         //old func before DB:
 
         // Static global counter

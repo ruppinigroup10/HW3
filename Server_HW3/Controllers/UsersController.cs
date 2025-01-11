@@ -73,7 +73,33 @@ namespace Server.Controllers
             }
         }
 
+        //Put api/<UsersController>/UpdateProfile
+        [HttpPut("UpdateProfile")]
+        public IActionResult UpdateProfile([FromBody] Server.Models.User user)
+        {
+            try
+            {
+                var updatedUser = Server.Models.User.UpdateProfile(user.id, user.name, user.email, user.password);
 
+                if (updatedUser != null)
+                {
+                    return Ok(new
+                    {
+                        message = "Profile updated successfully",
+                        user = updatedUser
+                    });
+                }
+                return BadRequest(new { message = "Update failed" });
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Email already exists"))
+                {
+                    return BadRequest(new { message = "Email already exists" });
+                }
+                return BadRequest(new { message = "Update failed" });
+            }
+        }
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]

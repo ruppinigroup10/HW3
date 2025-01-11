@@ -179,13 +179,24 @@ $(document).ready(() => {
   ////////////////////////////////////////////////
   const user = JSON.parse(localStorage.getItem("user"));
   if (user && user.isLoggedIn) {
-    $("#userInfo").html(`
-            <div>
-                <p>Welcome, ${user.name || user.email}!</p>
-                <a href="/Pages/index.html" style="color: white; margin-right: 10px;">Home</a>
-                <button onclick="logout()" class="btn btn-danger">Logout</button>
-            </div>
+    $("#userName").html(`
+    
+          <div style="display: flex; justify-content: center; padding: 10px;">
+          <span class="home-link" style="background: rgba(255, 255, 255, 0.1);">
+          Welcome, ${user.name || user.email}
+          </span>
+          </div>
         `);
+    $("#userLinks").html(`
+            
+            <a href="/Pages/index.html" class="home-link">
+              <i class="fas fa-gamepad"></i>Home
+            </a>
+            <a href="#" onclick="logout()" class="home-link">
+              <i class="fas fa-sign-out-alt"></i>Logout
+            </a>
+        `);
+
     getMyGames();
   } else {
     window.location.replace("/Pages/login.html");

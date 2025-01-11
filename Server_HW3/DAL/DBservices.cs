@@ -406,6 +406,65 @@ public class DBservices
         }
     }
 
+    //--------------------------------------------------------------------------------------------------
+    // Method to update user info from the database
+    //--------------------------------------------------------------------------------------------------
+    public User? UpdateUserInfo(int id, string name, string email, string password)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+        User? user = null;
+
+        try
+        {
+            con = connect("myProjDB");
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Database connection error: " + ex.Message);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@ID", id);
+        paramDic.Add("@Name", name);
+        paramDic.Add("@Email", email);
+        paramDic.Add("@Password", password);
+
+        cmd = CreateCommandWithStoredProcedureGeneral("SP_UpdateUserInfo", con, paramDic);
+
+        try
+        {
+            using (SqlDataReader dr = cmd.ExecuteReader())
+            {
+                if (dr.Read())
+                {
+                    user = new User
+                    {
+                        id = Convert.ToInt32(dr["ID"]),
+                        name = dr["Name"].ToString() ?? "",
+                        email = dr["Email"].ToString() ?? ""
+                    };
+                }
+            }
+            return user;
+        }
+        catch (SqlException ex)
+        {
+            if (ex.Message.Contains("Email already exists"))
+            {
+                throw new Exception("Email already exists");
+            }
+            throw new Exception("Update failed");
+        }
+        finally
+        {
+            if (con != null && con.State == System.Data.ConnectionState.Open)
+            {
+                con.Close();
+            }
+        }
+    }
+
     //---------------------------------------------------------------------------------
     // Create the SqlCommand
     //---------------------------------------------------------------------------------
