@@ -1,7 +1,7 @@
 // localhost vs production server
 
 const config = {
-  isLocalhost: true, // Switch this to false for production
+  isLocalhost: false, // Switch this to false for production
   PORT: "7067", // Your local port
   version: "tar1", // Switch API version here, number of tar
 
