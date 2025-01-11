@@ -3,10 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link
-      rel="stylesheet"
-      href="https://proj.ruppin.ac.il/igroup10/test2/tar2/CSS/style.css"
-    /> -->
     <link rel="stylesheet" href="/CSS/style.css" />
     <link
       rel="stylesheet"
@@ -19,55 +15,9 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-    <!-- <script
-      src="https://proj.ruppin.ac.il/igroup10/test2/tar2/script/ajaxCall.js"
-      defer
-    ></script> -->
     <script src="/script/ajaxCall.js" defer></script>
-    <!-- <script
-      src="https://proj.ruppin.ac.il/igroup10/test2/tar2/script/port.js"
-      defer
-    ></script> -->
-    <script src="/script/port.js" defer></script>
-    <!-- <script
-      src="https://proj.ruppin.ac.il/igroup10/test2/tar2/script/myGames.js"
-      defer
-    ></script> -->
+    <script src="/script/config.js" defer></script>
     <script src="/script/myGames.js" defer></script>
-
-    <script>
-      $(document).ready(function () {
-        // Check if user is logged in and display info
-        const user = JSON.parse(localStorage.getItem("user"));
-
-        if (user && user.isLoggedIn) {
-          $("#userInfo").html(`
-            <div>
-                <p>Welcome, ${user.name || user.email}!</p>
-                <a href="/Pages/index.html" style="color: white; margin-right: 10px;">Home</a>
-                <button onclick="logout()" class="btn btn-danger">Logout</button>
-            </div>
-        `);
-        } else {
-          window.location.replace("/Pages/login.html");
-        }
-      });
-
-      // Logout function
-      function logout() {
-        localStorage.removeItem("user");
-        localStorage.removeItem("userCredentials"); // Remove sensitive info too
-        Swal.fire({
-          title: "Logged Out!",
-          text: "You have been successfully logged out",
-          icon: "success",
-          timer: 1500,
-          showConfirmButton: false,
-        }).then(() => {
-          window.location.replace("/Pages/login.html");
-        });
-      }
-    </script>
     <style>
       .controls {
         text-align: center;

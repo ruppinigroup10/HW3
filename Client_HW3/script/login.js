@@ -1,6 +1,7 @@
 //////////////////////////////////
 // Password toggle functionality//
 //////////////////////////////////
+
 $(".password-toggle").click(function () {
   const passwordField = $(this).siblings("input");
   if (passwordField.attr("type") === "password") {
@@ -11,9 +12,11 @@ $(".password-toggle").click(function () {
     $(this).removeClass("fa-eye-slash").addClass("fa-eye");
   }
 });
+
 ////////////////////////////////
 // Tab switching functionality//
 ////////////////////////////////
+
 $(".tab-button").click(function () {
   $(".tab-button").removeClass("active");
   $(this).addClass("active");
@@ -22,21 +25,20 @@ $(".tab-button").click(function () {
   $(`#${formId}`).fadeIn();
 });
 
-//////////////////////////
-// Show login by default//
-//////////////////////////
+// Show login by default
 $('.tab-button[data-form="login"]').click();
 
 ////////////////////////
 // Login functionality//
 ////////////////////////
+
 $("#login").submit(function () {
   const user = {
     email: $("#log_email").val(),
     password: $("#log_password").val(),
   };
-  //api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Login";
-  api = `https://localhost:${PORT}/api/Users/Login`;
+
+  const api = config.getApiUrl("Users/Login");
 
   console.log("Attempting login with:", user);
 
@@ -92,6 +94,7 @@ function lecb(err) {
 ///////////////////////////
 // Register functionality//
 ///////////////////////////
+
 $("#Register").submit(function () {
   //alert("in register submit");
   const user = {
@@ -99,9 +102,8 @@ $("#Register").submit(function () {
     email: $("#reg_email").val(),
     password: $("#reg_password").val(),
   };
-  //api ="https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Register";
-  api = `https://localhost:${PORT}/api/Users/Register`;
 
+  const api = config.getApiUrl("Users/Register");
   console.log("Sending registration data:", user);
 
   ajaxCall("POST", api, JSON.stringify(user), rscb, recb);

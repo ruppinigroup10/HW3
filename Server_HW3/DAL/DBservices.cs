@@ -38,7 +38,7 @@ public class DBservices
     }
 
     //--------------------------------------------------------------------------------------------------
-    // This method insert game to the database 
+    // This method insert game 
     //--------------------------------------------------------------------------------------------------
     public int InsertGame(GameUser gameUser)
     {
@@ -85,7 +85,7 @@ public class DBservices
     }
 
     //--------------------------------------------------------------------------------------------------
-    // This method geting all games from the database
+    // This method geting all games
     //--------------------------------------------------------------------------------------------------
     public List<Game> getAllGames()
     {
@@ -142,7 +142,7 @@ public class DBservices
     }
 
     //--------------------------------------------------------------------------------------------------
-    // This method geting my games from the database
+    // This method geting my games - per user
     //--------------------------------------------------------------------------------------------------
 
     public List<Game> getAllMyGames(User user)
@@ -204,7 +204,7 @@ public class DBservices
 
 
     //--------------------------------------------------------------------------------------------------
-    // This method register user to the database
+    // This method register user
     //--------------------------------------------------------------------------------------------------
     public User? RegisterUser(string name, string email, string password)
     {
@@ -262,7 +262,7 @@ public class DBservices
     }
 
     //--------------------------------------------------------------------------------------------------
-    // This method login user to the database
+    // This method login user
     //--------------------------------------------------------------------------------------------------
     public User? LoginUser(string email, string password)
     {

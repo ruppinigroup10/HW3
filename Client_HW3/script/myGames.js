@@ -1,4 +1,7 @@
-// Helper function to check user authentication
+/////////////////////////////////////////////////
+// Helper function to check user authentication//
+/////////////////////////////////////////////////
+
 function checkUserAuth() {
   const user = JSON.parse(localStorage.getItem("user"));
   console.log("Current user:", user);
@@ -7,7 +10,10 @@ function checkUserAuth() {
 
 let allGames = []; // Store all games for filtering
 
-// Function to fetch all games
+////////////////////////////////
+// Function to fetch all games//
+////////////////////////////////
+
 function getMyGames() {
   if (!checkUserAuth()) {
     console.log("User auth failed in getMyGames");
@@ -17,8 +23,7 @@ function getMyGames() {
   const user = JSON.parse(localStorage.getItem("user"));
   console.log("Getting games for user ID:", user.id);
 
-  // const api = `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/GetGamesByUserId/userID/${user.id}`;
-  const api = `https://localhost:${PORT}/api/Games/GetGamesByUserId/userID/${user.id}`;
+  const api = config.getApiUrl(`Games/GetGamesByUserId/userID/${user.id}`);
   console.log("Making API call to:", api);
   ajaxCall("GET", api, "", getSCB, getECB);
 }
@@ -53,7 +58,10 @@ function getECB(err) {
   });
 }
 
-// Main renderGames function to display games
+///////////////////////////////////////////////
+// Main renderGames function to display games//
+///////////////////////////////////////////////
+
 function renderGames(games) {
   if (!Array.isArray(games)) {
     console.error("Invalid games data passed to renderGames");
@@ -129,14 +137,9 @@ function deleteGame(gameId) {
     if (result.isConfirmed) {
       console.log("Initiating delete for game:", gameId);
 
-      ajaxCall(
-        "DELETE",
-        // `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/${user.id}/${gameId}`,
-        `https://localhost:${PORT}/api/Games/${user.id}/${gameId}`,
-        null,
-        deleteSCB,
-        deleteECB
-      );
+      const api = config.getApiUrl(`Games/${user.id}/${gameId}`);
+
+      ajaxCall("DELETE", api, null, deleteSCB, deleteECB);
     }
   });
 
@@ -177,6 +180,7 @@ $(document).ready(() => {
   ////////////////////////////////////////////////
   // Check if user is logged in and display info//
   ////////////////////////////////////////////////
+
   const user = JSON.parse(localStorage.getItem("user"));
   if (user && user.isLoggedIn) {
     $("#userInfo").html(`
@@ -202,6 +206,7 @@ $(document).ready(() => {
 ////////////////////
 // Logout function//
 ////////////////////
+
 function logout() {
   localStorage.removeItem("user");
   localStorage.removeItem("userCredentials"); // Remove sensitive info too
@@ -219,6 +224,7 @@ function logout() {
 //////////////////////////////////////
 // Function to filter games by price//
 //////////////////////////////////////
+
 function filterByPrice() {
   if (!checkUserAuth()) {
     console.log("User auth failed in filterByPrice");
@@ -268,6 +274,7 @@ function filterByPrice() {
 /////////////////////////////////////
 // Function to filter games by rank//
 /////////////////////////////////////
+
 function filterByRank() {
   if (!checkUserAuth()) {
     console.log("User auth failed in filterByRank");

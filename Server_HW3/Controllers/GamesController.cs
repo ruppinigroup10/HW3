@@ -9,7 +9,7 @@ namespace Server.Controllers
     [ApiController]
     public class GamesController : ControllerBase
     {
-        // GET: api/<GamesController>
+        // GET: api/<GamesController> Get all games
         [HttpGet("GetAllGames")]
         public ActionResult<IEnumerable<Game>> GetAllGames()
         {
@@ -27,7 +27,7 @@ namespace Server.Controllers
             }
         }
 
-        //get games by user id
+        //GET: api/<GamesController>/5 by user id
         [HttpGet("GetGamesByUserId/userID/{ID}")]
         public ActionResult<IEnumerable<Game>> GetGamesByUserId(int ID)
         {
@@ -85,7 +85,7 @@ namespace Server.Controllers
 
 
 
-        // POST api/<GameController>
+        // POST api/<GameController> Add a game
         [HttpPost]
         public IActionResult Post([FromBody] GameUser gameUser)
         {
@@ -106,12 +106,12 @@ namespace Server.Controllers
 
 
         // PUT api/<GamesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        // [HttpPut("{id}")]
+        // public void Put(int id, [FromBody] string value)
+        // {
+        // }
 
-        // DELETE api/<GamesController>/5
+        // DELETE api/<GamesController>/5 by user id and game id
         [HttpDelete("{userId}/{gameId}")]
         public IActionResult Delete(int userId, int gameId)
         {
@@ -134,27 +134,5 @@ namespace Server.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
-        //old delete method
-        // [HttpDelete("{id}")]
-        // public IActionResult Delete(int id)
-        // {
-        //     try
-        //     {
-        //         int result = Game.DeleteById(id);
-        //         if (result == 0)
-        //         {
-        //             return BadRequest(new { message = $"Game with ID {id} not found." });
-        //         }
-        //         else
-        //         {
-        //             return Ok(new { message = $"Game with ID {id} deleted successfully." });
-        //         }
-        //     }
-        //     catch (Exception)
-        //     {
-        //         return BadRequest(new { message = $"Invalid ID: {id}" });
-        //     }
-        // }
     }
 }

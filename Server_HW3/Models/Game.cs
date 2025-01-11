@@ -90,25 +90,12 @@ namespace Server.Models
             if (res > 0)
                 return true;
             return false;
-
-            //if (gameList.Exists(x => (x.AppID == this.AppID || x.Name == this.Name)))
-            //{
-            //    return false;
-            //}
-            //else
-            //{
-            //    gameList.Add(this);
-            //    return true;
-            //}
         }
         public static List<Game> readGame()
         {
             DBservices dbs = new DBservices();
             Console.WriteLine("in BL readGame before return");
             return dbs.getAllGames();
-
-            //return gameList;
-
         }
 
         public static List<Game> readMyGame(User user)
@@ -150,36 +137,5 @@ namespace Server.Models
             }
         }
 
-        //old code before DB
-        // public static List<Game> GetByPrice(double minPrice)
-        // {
-        //     List<Game> returnList = new List<Game>();
-        //     foreach (var game in gameList)
-        //     {
-        //         if (game.Price >= minPrice)
-        //             returnList.Add(game);
-        //     }
-        //     return returnList;
-        // }
-
-        // public static List<Game> GetByRankScore(int minScore)
-        // {
-        //     List<Game> returnList = new List<Game>();
-        //     foreach (var game in gameList)
-        //     {
-        //         if (game.scoreRank >= minScore)
-        //             returnList.Add(game);
-        //     }
-        //     return returnList;
-        // }
-
-        // public static int DeleteById(int id)
-        // {
-        //     if (id < 0)
-        //     {
-        //         throw new Exception($"Invalid ID: {id}");
-        //     }
-        //     return gameList.RemoveAll(x => x.AppID == id);// RemoveAll returns the number of elements removed
-        // }
     }
 }

@@ -15,7 +15,7 @@ namespace Server.Controllers
         //     return Server.Models.User.readUser();
         // }
 
-        // GET api/<UsersController>/5
+        // GET api/<UsersController>/5 
         [HttpGet("{id}")]
         public string Get(int id)
         {
@@ -49,6 +49,7 @@ namespace Server.Controllers
                 return BadRequest(new { message = "Registration failed" });
             }
         }
+
         //Post api/<UsersController>/Login
         [HttpPost("Login")]
         public IActionResult Login([FromBody] User user)

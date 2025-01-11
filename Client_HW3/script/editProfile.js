@@ -116,8 +116,7 @@ $(document).ready(() => {
       password: isPasswordChanged ? password : originalPassword,
     };
 
-    //const api = `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/UpdateProfile`,
-    const api = `https://localhost:${PORT}/api/Users/UpdateProfile`;
+    const api = config.getApiUrl("Users/UpdateProfile");
     ajaxCall(
       "PUT",
       api,

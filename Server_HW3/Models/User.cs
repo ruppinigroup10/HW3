@@ -65,46 +65,5 @@
             return dbs.UpdateUserInfo(id, name, email, password);
         }
 
-        //old func before DB:
-
-        // Static global counter
-        //private static int GlobalUserIdCounter = 1;
-
-        // public static int Register(string Name, string Email, string Password)
-        // {
-        //     if (UsersList.Exists(x => x.Email == Email))
-        //     {
-        //         return -1;
-        //     }
-
-        //     User newUser = new User(GlobalUserIdCounter++, Name, Email, Password);
-        //     if (newUser.insertUser())
-        //     {
-        //         return 1;
-        //     }
-        //     else
-        //     {
-        //         return 0;
-        //     }
-        // }
-
-        // public static int Login(string email, string password)
-        // {
-        //     // Find the user by email
-        //     User? user = UsersList.FirstOrDefault(u => u.Email == email);
-
-        //     if (user == null)
-        //     {
-        //         return -1; // Email not found
-        //     }
-
-        //     // Verify password
-        //     if (user.Password != password)
-        //     {
-        //         return 0; // Incorrect password
-        //     }
-
-        //     return 1; // Successful login
-        // }
     }
 }
