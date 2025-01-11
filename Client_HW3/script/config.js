@@ -9,7 +9,7 @@ const config = {
   get baseApi() {
     return this.isLocalhost
       ? `https://localhost:${this.PORT}/api`
-      : `https://proj.ruppin.ac.il/igroup10/test2/tar1/api/`;
+      : `https://proj.ruppin.ac.il/igroup10/test2/tar1/api`;
   },
 
   // Helper method for getting API URLs
