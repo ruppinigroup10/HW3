@@ -6,9 +6,9 @@ let mainD = document.getElementById("main");
 
 function getAllGames() {
   console.log("in getAllGames");
-  //const api = config.getApiUrl("Games/GetAllGames");
-  const api =
-    "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/GetAllGames";
+  const api = config.getApiUrl("Games/GetAllGames");
+  // const api =
+  //   "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games/GetAllGames";
   ajaxCall("GET", api, "", renderAllGames, errorCB);
   console.log("after ajax");
 }
@@ -87,8 +87,8 @@ mainD.addEventListener("click", (e) => {
 
     console.log("Sending data:", { game: GameToPost, user: UserToPost });
 
-    //const api = config.getApiUrl("Games");
-    const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games";
+    const api = config.getApiUrl("Games");
+    //const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Games";
     const GameUser = { game: GameToPost, user: UserToPost };
 
     ajaxCall("POST", api, JSON.stringify(GameUser), postSCB, postECB);
