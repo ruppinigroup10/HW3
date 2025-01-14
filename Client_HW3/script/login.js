@@ -38,8 +38,9 @@ $("#login").submit(function () {
     password: $("#log_password").val(),
   };
 
-  const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Login";
-
+  //const api = "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Login";
+  //const api = `https://localhost:${PORT_BU}/api/Users/Login`;
+  const api = config.getApiUrl("Users/Login");
   console.log("Attempting login with:", user);
   console.log("api:", api);
 
@@ -77,10 +78,13 @@ function lscb(result) {
     timer: 1500,
     showConfirmButton: false,
   }).then(() => {
-    window.location.replace(
-      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/index.html"
-    );
-    //window.location.replace("/Pages/index.html");
+    window.location.replace(config.getAssetUrl("Pages/index.html"));
+    // window.location.replace(
+    //   "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/index.html"
+    // );
+    // window.location.replace(
+    //   "/Pages/index.html"
+    // );
   });
 }
 
@@ -107,8 +111,11 @@ $("#Register").submit(function () {
     password: $("#reg_password").val(),
   };
 
-  const api =
-    "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Register";
+  // const api =
+  //   "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/Register";
+  // const api =
+  //   `https://localhost:${PORT_BU}/api/Users/Register`;
+  const api = config.getApiUrl("Users/Register");
   console.log("Sending registration data:", user);
 
   ajaxCall("POST", api, JSON.stringify(user), rscb, recb);
@@ -144,10 +151,13 @@ function rscb(result) {
     timer: 1500,
     showConfirmButton: false,
   }).then(() => {
-    window.location.replace(
-      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/index.html"
-    );
-    //window.location.replace("/Pages/index.html");
+    window.location.replace(config.getAssetUrl("Pages/index.html"));
+    // window.location.replace(
+    //   "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/index.html"
+    // );
+    // window.location.replace(
+    //   "/Pages/index.html"
+    // );
   });
 }
 

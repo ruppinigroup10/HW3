@@ -2,10 +2,11 @@ $(document).ready(() => {
   // Check if user is logged in
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
+    window.location.replace(config.getAssetUrl("Pages/login.html"));
+    // window.location.replace(
+    //   "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html"
+    // );
     // window.location.replace("/Pages/login.html");
-    window.location.replace(
-      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/login.html"
-    );
     return;
   }
 
@@ -119,8 +120,10 @@ $(document).ready(() => {
       password: isPasswordChanged ? password : originalPassword,
     };
 
-    const api =
-      "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/UpdateProfile";
+    // const api =
+    //   "https://proj.ruppin.ac.il/igroup10/test2/tar1/api/Users/UpdateProfile";
+    // const api =`https://localhost:${PORT_BU}/api/Users/UpdateProfile"`;
+    const api = config.getApiUrl("Users/UpdateProfile");
     ajaxCall(
       "PUT",
       api,
@@ -148,10 +151,12 @@ function updateSuccessCB(result) {
     timer: 1500,
     showConfirmButton: false,
   }).then(() => {
-    window.location.href =
-      "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/index.html";
-    // window.location.href = "/Pages/index.html";
+    window.location.replace(config.getAssetUrl("Pages/index.html"));
   });
+  //   window.location.href =
+  //     "https://proj.ruppin.ac.il/igroup10/test2/tar3/Pages/index.html";
+  // });
+  //   window.location.href ="/Pages/index.html";});
 }
 
 function updateErrorCB(error) {
